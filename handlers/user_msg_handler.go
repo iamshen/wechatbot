@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/869413421/wechatbot/gtp"
+	"github.com/iamshen/wechatbot/gtp"
 	"github.com/eatmoreapple/openwechat"
 	"log"
 	"strings"
@@ -30,7 +30,7 @@ func NewUserMessageHandler() MessageHandlerInterface {
 func (g *UserMessageHandler) ReplyText(msg *openwechat.Message) error {
 	// 接收私聊消息
 	sender, err := msg.Sender()
-	log.Printf("Received User %v Text Msg : %v", sender.NickName, msg.Content)
+	log.Printf("收到用户 %v 文本消息 : %v", sender.NickName, msg.Content)
 
 	// 向GPT发起请求
 	requestText := strings.TrimSpace(msg.Content)
@@ -38,7 +38,7 @@ func (g *UserMessageHandler) ReplyText(msg *openwechat.Message) error {
 	reply, err := gtp.Completions(requestText)
 	if err != nil {
 		log.Printf("gtp request error: %v \n", err)
-		msg.ReplyText("机器人神了，我一会发现了就去修。")
+		msg.ReplyText("机器愣神了，我一会发现了就去修。")
 		return err
 	}
 	if reply == "" {
@@ -50,7 +50,7 @@ func (g *UserMessageHandler) ReplyText(msg *openwechat.Message) error {
 	reply = strings.Trim(reply, "\n")
 	_, err = msg.ReplyText(reply)
 	if err != nil {
-		log.Printf("response user error: %v \n", err)
+		log.Printf("回复用户异常: %v \n", err)
 	}
 	return err
 }
